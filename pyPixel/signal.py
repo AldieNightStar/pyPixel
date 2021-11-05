@@ -16,11 +16,13 @@ class Signal:
     def disconnect(self, func):
         self.funcs.remove(func)
 
-    async def wait(self):
+    async def wait(self, loop):
         f = asyncio.Future()
 
         def cb(data):
-            f.set_result(data)
+            async def tsafe():
+                f.set_result(data)
+            asyncio.run_coroutine_threadsafe(tsafe(), loop)
             self.disconnect(cb)
         self.connect(cb)
         return await f
