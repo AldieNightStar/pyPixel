@@ -57,7 +57,7 @@ sig = pp.Signal()
 sig.emit(DATA)
 
 # Block's anync until signal emitted. Returns data
-await sig.wait()
+await sig.wait(event_loop)
 
 # Connect function to a signal
 sig.connect(func)
